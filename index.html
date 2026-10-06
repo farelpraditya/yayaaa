@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Untuk Lala</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Figtree:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --night:#14101a; --plum:#2a1a2e; --blossom:#e8a6b6; --amber:#f0b45a; --mist:#d9d2e4;
+      --serif:'Fraunces',Georgia,serif; --sans:'Figtree',system-ui,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--night);color:var(--mist);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+    body.locked{overflow:hidden}
+    h1,h2,h3{font-family:var(--serif);font-weight:300;line-height:1.15}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+    #petals{position:fixed;inset:0;pointer-events:none;z-index:1}
+
+    /* Gerbang masuk */
+    #gate{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 60%,var(--plum),var(--night) 70%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity 1.4s,visibility 1.4s}
+    #gate.open{opacity:0;visibility:hidden}
+    .boat{width:110px;animation:float 5s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+    #gate h1{font-size:clamp(2rem,6vw,3.4rem);margin:28px 0 8px}
+    #gate p{max-width:34ch;opacity:.75;margin-bottom:32px}
+    .btn{font:500 1rem var(--sans);color:var(--night);background:var(--blossom);border:0;border-radius:999px;padding:14px 34px;cursor:pointer;transition:transform .2s,background .2s}
+    .btn:hover{transform:scale(1.05);background:var(--amber)}
+
+    /* Hero */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding:0 6vw 12vh}
+    .hero::before{content:"";position:absolute;inset:0;background:url(images/foto2.png) center 20%/cover;filter:brightness(.55) saturate(1.1)}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--night) 5%,transparent 60%)}
+    .hero div{position:relative;z-index:2;max-width:760px}
+    .hero h2{font-size:clamp(2.6rem,9vw,6.5rem);font-weight:600;color:#fff}
+    .hero p{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,2.4vw,1.5rem);margin-top:16px;min-height:2.2em}
+    .cursor{display:inline-block;width:2px;height:1.1em;background:var(--amber);margin-left:3px;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    section{position:relative;z-index:2;padding:12vh 6vw;max-width:1200px;margin:0 auto}
+    section>h2{font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:12px}
+    section>.sub{opacity:.7;max-width:50ch;margin-bottom:48px}
+
+    /* Galeri: foto bergaya polaroid, klik untuk memperbesar */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:36px;align-items:start}
+    .frame{background:#efe8f0;padding:12px 12px 18px;border-radius:3px;cursor:pointer;border:0;text-align:left;color:#2a1a2e;
+      box-shadow:0 18px 40px rgba(0,0,0,.5);transition:transform .35s}
+    .frame:nth-child(odd){transform:rotate(-2.2deg)}
+    .frame:nth-child(even){transform:rotate(1.8deg);margin-top:28px}
+    .frame:hover{transform:rotate(0) scale(1.04)}
+    .frame img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;display:block;border-radius:2px}
+    .frame span{display:block;font-family:var(--serif);font-style:italic;margin-top:12px;padding:0 4px}
+
+    /* Kartu kenangan: klik untuk membuka */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .card{perspective:900px;height:230px;background:none;border:0;cursor:pointer;font:inherit;color:inherit}
+    .card .in{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d}
+    .card.flip .in{transform:rotateY(180deg)}
+    .card .f,.card .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:26px;display:flex;align-items:center;justify-content:center;text-align:center}
+    .card .f{background:var(--plum);border:1px solid rgba(232,166,182,.3);font-family:var(--serif);font-size:1.4rem}
+    .card .b{background:var(--blossom);color:var(--night);transform:rotateY(180deg);font-size:1.02rem}
+
+    /* Jarak waktu */
+    .gap h2{font-size:clamp(2rem,6vw,4rem)}
+    .gap h2 b{font-weight:600;color:var(--amber);font-size:1.6em;margin-right:.1em}
+
+    /* Surat penutup */
+    .letter{background:var(--plum);border-radius:18px;padding:clamp(24px,5vw,56px);border:1px solid rgba(232,166,182,.25)}
+    .letter p{font-family:var(--serif);font-size:clamp(1.05rem,2vw,1.3rem);max-width:60ch;margin-bottom:1.1em}
+    footer{position:relative;z-index:2;text-align:center;padding:60px 20px 90px;opacity:.6;font-size:.9rem}
+
+    /* Pemutar musik */
+    #music{position:fixed;right:18px;bottom:18px;z-index:40;width:52px;height:52px;border-radius:50%;border:1px solid var(--blossom);background:rgba(20,16,26,.8);color:var(--blossom);font-size:1.3rem;cursor:pointer;backdrop-filter:blur(6px)}
+    #music.playing{animation:spin 6s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Lightbox */
+    #lb{position:fixed;inset:0;z-index:60;background:rgba(10,7,14,.92);display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px;cursor:zoom-out}
+    #lb.show{display:flex}
+    #lb img{max-width:92vw;max-height:80vh;border-radius:4px}
+    #lb p{font-family:var(--serif);font-style:italic;margin-top:14px;font-size:1.2rem}
+
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  </style>
+</head>
+<body class="locked">
+
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<div id="gate">
+  <svg class="boat" viewBox="0 0 120 80" aria-hidden="true">
+    <path d="M10 50 L110 50 L92 72 L28 72 Z" fill="#e8a6b6"/>
+    <path d="M60 8 L60 50 L22 50 Z" fill="#efe8f0"/>
+    <path d="M60 8 L60 50 L98 50 Z" fill="#d9d2e4"/>
+  </svg>
+  <h1>Untuk Lala</h1>
+  <p>Ada kenangan kita yang ingin kutitipkan di sini. Nyalakan suara, lalu masuk.</p>
+  <button class="btn" id="enter">Masuk</button>
+</div>
+
+<header class="hero">
+  <div>
+    <h2>Lala</h2>
+    <p><span id="typed"></span><span class="cursor"></span></p>
+  </div>
+</header>
+
+<section>
+  <h2>Potongan malam-malam kita</h2>
+  <p class="sub">Klik foto untuk memperbesarnya.</p>
+  <div class="gallery">
+    <button class="frame" data-cap="Satu pelukan di tepi kolam"><img src="images/foto1.png" alt="Kita berdua di dunia game"><span>Satu pelukan di tepi kolam</span></button>
+    <button class="frame" data-cap="Langit malam, bunga sakura"><img src="images/foto2.png" alt="Lala menatap ke atas"><span>Langit malam, bunga sakura</span></button>
+    <button class="frame" data-cap="Senyum yang selalu kuingat"><img src="images/foto3.png" alt="Lala berpose"><span>Senyum yang selalu kuingat</span></button>
+    <button class="frame" data-cap="Aku di balik kamera, kamu di antara bunga"><img src="images/foto4.png" alt="Taman bunga"><span>Aku di balik kamera, kamu di antara bunga</span></button>
+  </div>
+</section>
+
+<section>
+  <h2>Kartu kenangan</h2>
+  <p class="sub">Ketuk kartunya satu per satu.</p>
+  <div class="cards">
+    <button class="card"><div class="in"><div class="f">Setiap malam</div><div class="b">Kita login bersama, ngobrol tanpa sadar jam sudah larut. Itu rutinitas yang paling kurindukan.</div></div></button>
+    <button class="card"><div class="in"><div class="f">Tertawa</div><div class="b">Ada tawa yang tidak butuh alasan. Cukup kamu bilang sesuatu yang konyol, dan semuanya jadi ringan.</div></div></button>
+    <button class="card"><div class="in"><div class="f">Dunia kecil kita</div><div class="b">Taman, kolam, bunga-bunga. Dunia yang cuma pixel, tapi rasanya nyata karena ada kamu.</div></div></button>
+    <button class="card"><div class="in"><div class="f">Terima kasih</div><div class="b">Untuk waktu, cerita, dan kebersamaan yang kamu bagi. Semuanya masih tersimpan baik.</div></div></button>
+  </div>
+</section>
+
+<section class="gap">
+  <h2><b>5</b> bulan sudah tidak bertemu ya</h2>
+</section>
+
+<section>
+  <div class="letter">
+    <h2 style="margin-bottom:24px">Surat kecil</h2>
+    <p>Lala, halaman ini bukan untuk meminta apa-apa. Aku hanya ingin kamu tahu bahwa waktu yang kita lewati bersama itu berharga bagiku.</p>
+    <p>Kalau suatu hari kamu lewat sini dan tersenyum sebentar, itu sudah cukup.</p>
+    <p>Dari aku, yang masih mengingat.</p>
+  </div>
+</section>
+
+<footer>Dibuat dengan kenangan, untuk Lala.</footer>
+
+<button id="music" aria-label="Putar atau jeda musik" title="Musik">♪</button>
+<div id="lb" role="dialog" aria-label="Foto diperbesar"><img alt=""><p></p></div>
+
+<audio id="bgm" src="audio/perahu-kertas.mp3" loop preload="auto"></audio>
+
+<script>
+  /* ====== PENGATURAN: ubah di sini ====== */
+  const TAGLINE = "Dulu kita tak pernah kehabisan cerita.";
+  /* ====================================== */
+
+  const bgm = document.getElementById('bgm');
+  const musicBtn = document.getElementById('music');
+
+  function setPlaying(on){ musicBtn.classList.toggle('playing', on); musicBtn.textContent = on ? '♪' : '▶'; }
+  function play(){ bgm.volume = .7; bgm.play().then(()=>setPlaying(true)).catch(()=>setPlaying(false)); }
+
+  // Masuk: klik tombol = izin browser untuk memutar lagu otomatis
+  document.getElementById('enter').addEventListener('click', () => {
+    document.getElementById('gate').classList.add('open');
+    document.body.classList.remove('locked');
+    play(); typeLine();
+  });
+  musicBtn.addEventListener('click', () => { bgm.paused ? play() : (bgm.pause(), setPlaying(false)); });
+  setPlaying(false);
+
+  // Teks mengetik
+  function typeLine(){
+    const el = document.getElementById('typed'); let i = 0;
+    const t = setInterval(() => { el.textContent = TAGLINE.slice(0, ++i); if(i >= TAGLINE.length) clearInterval(t); }, 70);
+  }
+
+  // Kartu kenangan
+  document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => c.classList.toggle('flip')));
+
+  // Lightbox
+  const lb = document.getElementById('lb');
+  document.querySelectorAll('.frame').forEach(f => f.addEventListener('click', () => {
+    lb.querySelector('img').src = f.querySelector('img').src;
+    lb.querySelector('p').textContent = f.dataset.cap;
+    lb.classList.add('show');
+  }));
+  lb.addEventListener('click', () => lb.classList.remove('show'));
+  addEventListener('keydown', e => { if(e.key === 'Escape') lb.classList.remove('show'); });
+
+  // Kelopak sakura jatuh
+  (function(){
+    const c = document.getElementById('petals'), x = c.getContext('2d');
+    const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    let w, h, P = [];
+    function size(){ w = c.width = innerWidth; h = c.height = innerHeight; }
+    size(); addEventListener('resize', size);
+    for(let i = 0; i < 40; i++) P.push({x:Math.random()*w, y:Math.random()*h, r:3+Math.random()*5, v:.4+Math.random()*.9, s:Math.random()*Math.PI*2});
+    function draw(){
+      x.clearRect(0,0,w,h);
+      P.forEach(p => {
+        p.y += p.v; p.s += .01; p.x += Math.sin(p.s) * .6;
+        if(p.y > h + 10){ p.y = -10; p.x = Math.random()*w; }
+        x.beginPath(); x.ellipse(p.x, p.y, p.r, p.r*.6, p.s, 0, 7);
+        x.fillStyle = 'rgba(232,166,182,.55)'; x.fill();
+      });
+      if(!reduce) requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+</body>
+</html>
